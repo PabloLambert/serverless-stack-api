@@ -15,7 +15,9 @@ export const main = handler(async (event, context) => {
       createdAt: Date.now()
     }
   };
-
+  console.log("params: " + JSON.stringify(params));
+  console.log("env   : " + JSON.stringify(process.env));
    await dynamoDb.put(params);
+
    return params.Item;
 });

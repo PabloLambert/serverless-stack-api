@@ -25,17 +25,18 @@ provider:
     TableName: notes
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
-iamRoleStatements:
-  - Effect: Allow
-    Action:
-      - dynamoDb: DescribeTable
-      - dynamoDb: Query
-      - dynamoDb: Scan
-      - dynamoDb: GetItem
-      - dynamoDb: PutItem
-      - dynamoDb: UpdateItem
-      - dynamoDb: DeleteItem
-    Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:table/*"
 
 functions:
   create:
@@ -62,30 +63,30 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
-  #update:
-  #  handler: update.main
-  #  events:
-  #    - http:
-  #        path: notes/{id}
-  #        method: put
-  #        cors: true
-  #        authorizer: aws_iam
-  #delete:
-  #  handler: delete.main
-  #  events:
-  #    - http:
-  #        path: notes/{id}
-  #        method: delete
-  #        cors: true
-  #        authorizer: aws_iam
-  #billing:
-  #  handler: billing.main
-  #  events:
-  #    - http:
-  #        path: billing
-  #        method: post
-  #        cors: true
-  #        authorizer: aws_iam
+  update:
+    handler: update.main
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
+  delete:
+    handler: delete.main
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
+          cors: true
+          authorizer: aws_iam
+  billing:
+    handler: billing.main
+    events:
+      - http:
+          path: billing
+          method: post
+          cors: true
+          authorizer: aws_iam
 
-#resources:
-#  - ${file(resources/api-gateway-errors.yml)}
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
